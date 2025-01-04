@@ -4,20 +4,21 @@ using UnityEngine.UI;
 public class ArrowNavigation : MonoBehaviour
 {
     [SerializeField] Image arrowImage; // Ok işareti
-    [SerializeField] Button[] buttons; // Butonlar
-    [SerializeField] float yOffset = 0.5f; // Ok işareti için offset
-    private int currentIndex = 0;
+    public Button[] buttons; // Butonlar
+    [SerializeField] float yOffset ; // Ok işareti için offset
+    public int currentIndex = 0;
     private void Start()
     {
         // İlk buton seçili olarak başlat
         EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
         
         // İlk seçili butonun pozisyonunu ayarla
-        UpdateArrowPosition(buttons[0].transform);
+        UpdateArrowPosition(currentIndex);
     }
 
     private void Update()
     {
+        Debug.Log("Index: " + currentIndex);
         // Seçili butonu kontrol et
         GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
 
@@ -27,7 +28,7 @@ public class ArrowNavigation : MonoBehaviour
             if (selectedButton != null)
             {
                 // Seçili buton değiştiğinde ok işaretini güncelle
-                UpdateArrowPosition(selectedButton.transform);
+                UpdateArrowPosition(currentIndex);
             }
         }
          // Aşağı ok tuşuna basıldığında butonlar arasında geçiş yap
@@ -36,11 +37,8 @@ public class ArrowNavigation : MonoBehaviour
             // Mevcut buton index'ini güncelle
             currentIndex = (currentIndex + 1) % buttons.Length;
 
-            // Yeni seçili butonun pozisyonunu güncelle
-            EventSystem.current.SetSelectedGameObject(buttons[currentIndex].gameObject);
-
             // Ok işaretinin pozisyonunu güncelle
-            UpdateArrowPosition(buttons[currentIndex].transform);
+            UpdateArrowPosition(currentIndex);
         }
 
         // Yukarı ok tuşuna basıldığında butonlar arasında geçiş yap
@@ -49,21 +47,23 @@ public class ArrowNavigation : MonoBehaviour
             // Mevcut buton index'ini güncelle
             currentIndex = (currentIndex - 1 + buttons.Length) % buttons.Length;
 
-            // Yeni seçili butonun pozisyonunu güncelle
-            EventSystem.current.SetSelectedGameObject(buttons[currentIndex].gameObject);
-
             // Ok işaretinin pozisyonunu güncelle
-            UpdateArrowPosition(buttons[currentIndex].transform);
+            UpdateArrowPosition(currentIndex);
         }
     }
 
-    private void UpdateArrowPosition(Transform buttonTransform)
+    
+    public void UpdateArrowPosition(int index)
     {
         // Ok işaretinin pozisyonunu seçilen butona göre ayarla
-        Vector3 targetPosition = buttonTransform.position;
-
-        // Y offset ekle
+        Vector3 targetPosition = buttons[index].transform.position;
+        EventSystem.current.SetSelectedGameObject(buttons[index].gameObject);
+        // X offset ekle
         arrowImage.transform.position = new Vector3(targetPosition.x+ yOffset, targetPosition.y , targetPosition.z);
+    }
+    public void ResetCurrentIndex() 
+    {
+        currentIndex = 0;
     }
    
 }
