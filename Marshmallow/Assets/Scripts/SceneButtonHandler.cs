@@ -3,22 +3,20 @@ public class SceneButtonHandler : MonoBehaviour
 {
     public void LoadSceneAsyncByName(string sceneName)
     {
-        SceneLoaderManager.Instance.LoadSceneAsync(sceneName);
+        ManagerHub.Instance.GetManager<SceneLoaderManager>().LoadSceneAsync(sceneName);
     }
-
     public void LoadSceneAsyncById(int sceneId)
     {
-        SceneLoaderManager.Instance.LoadSceneAsync(sceneId);
+        ManagerHub.Instance.GetManager<SceneLoaderManager>().LoadSceneAsync(sceneId);
     }
 
-    public void LoadScene(string sceneName) 
+    public void LoadScene(string sceneName)
     {
-        SceneLoaderManager.Instance.LoadScene(sceneName);
+        ManagerHub.Instance.GetManager<SceneLoaderManager>().LoadScene(sceneName);
     }
 
-    public void LoadScene(int sceneId) 
+    public void LoadScene(int sceneId)
     {
-        SceneLoaderManager.Instance.LoadScene(sceneId);
+        ManagerHub.Instance.GetManager<SceneLoaderManager>().LoadScene(sceneId);
     }
-    
 }

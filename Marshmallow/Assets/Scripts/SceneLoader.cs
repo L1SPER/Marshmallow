@@ -1,29 +1,39 @@
-using Unity.VisualScripting;
-using UnityEditor.SearchService;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoaderManager: MonoBehaviour
+public class SceneLoaderManager : MonoBehaviour
 {
-    private static SceneLoaderManager instance;
-    public static SceneLoaderManager Instance { get => instance; private set=> instance=value; }
+    private Stack<string> sceneHistory =new Stack<string>();
+    private string currentSceneName;
     
     private void Awake()
     {
-        Singleton();
+        ManagerHub.Instance.RegisterManager(this);
+        currentSceneName=SceneManager.GetActiveScene().name;
+        sceneHistory.Push(currentSceneName);
     }
 
-    private void Singleton()
+    private void OnEnable()
     {
-        if (Instance != null&&  Instance!=this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        SceneManager.sceneLoaded+=OnSceneLoaded;
     }
 
-    public void LoadScene(string name)
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded-= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        currentSceneName =scene.name;
+        if(!sceneHistory.Contains(currentSceneName))
+        {
+            sceneHistory.Push(currentSceneName);
+        }
+    }
+
+    public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(name);
     }
@@ -33,13 +43,27 @@ public class SceneLoaderManager: MonoBehaviour
         SceneManager.LoadScene(sceneId);
     }
 
-    public void LoadSceneAsync(string name)
+    public void LoadSceneAsync(string sceneName)
     {
-        SceneManager.LoadSceneAsync(name);
+        SceneManager.LoadSceneAsync(sceneName);
     }
-    
+
     public void LoadSceneAsync(int sceneId)
     {
         SceneManager.LoadSceneAsync(sceneId);
+    }
+
+    public void GoBack()
+    {
+        if(sceneHistory.Count>1)
+        {
+            sceneHistory.Pop();
+            string previousScene= sceneHistory.Peek();
+            LoadScene(previousScene);
+        }
+        else
+        {
+            Debug.Log("No previous scene to return to!");
+        }
     }
 }
