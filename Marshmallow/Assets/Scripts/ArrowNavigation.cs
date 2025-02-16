@@ -281,13 +281,13 @@ public class ArrowNavigation : MonoBehaviour
 
     [Header("Arrow Image & Buttons")]
     [SerializeField] private Image arrowImage;
-    [SerializeField] private Button[] buttons;
+    [SerializeField] public Button[] buttons;
     [SerializeField] private float arrowOffset;
+
     private void Start()
     {
         AddButtonListeners();
     }
-
     private void AddButtonListeners()
     {
         foreach(Button button in buttons)
@@ -312,11 +312,11 @@ public class ArrowNavigation : MonoBehaviour
         }
     }
     public IEnumerator SetButtonNextFrame(GameObject button)
-{
-    yield return null; // Bir frame bekle
-    EventSystem.current.SetSelectedGameObject(null);
-    EventSystem.current.SetSelectedGameObject(button);
-}
+    {
+        yield return null; // Bir frame bekle
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(button);
+    }
     private void UpdateArrowPosition(Button button)
     {
         if(arrowImage ==null || button==null ) return;

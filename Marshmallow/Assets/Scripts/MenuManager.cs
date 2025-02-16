@@ -1,60 +1,168 @@
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class MainMenu : MonoBehaviour
+public enum MenuType
 {
+    None,
+    Main,
+    Settings,
+    Statistics,
+    Quit
+}
+public class MenuManager : MonoBehaviour
+{
+    #region Variables Section
     [Header("Menus")]
     [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject statisticsMenu;
-
+    [SerializeField] GameObject quitMenu;
+    #endregion
+    public static Dictionary<GameObject, MenuType> menus = new Dictionary<GameObject, MenuType>();
+    private void Awake()
+    {
+        ManagerHub.Instance.RegisterManager(this);
+    }
     private void Start()
     {
-        mainMenu.SetActive(true);
-        settingsMenu.SetActive(false);
-        statisticsMenu.SetActive(false);
+        HideMenus();
+        Debug.Log("Count : " + menus.Count);
+        PrintMenuDictionary();
+
         mainMenu.GetComponent<ArrowNavigation>().SetInitialButton();
     }
-    public void OpenChapter1()
+
+    private void HideMenus()
     {
-        mainMenu.SetActive(false);
-        //Chapter 1 acilacak
+        HideMenu(settingsMenu);
+        HideMenu(statisticsMenu);
+        HideMenu(quitMenu);
+    }
+
+    private void PrintMenuDictionary()
+    {
+        foreach (var m in menus)
+        {
+            Debug.Log("M.Key Name : " + m.Key.name);
+        }
+    }
+     private void ShowMenu(GameObject menu)
+    {
+        if (!ContainsMenu(menu))
+        {
+            Debug.LogError("Menus dictionary dont contains menu");
+            return;
+        }
+        menu.SetActive(true);
+        //StartCoroutine(menu.GetComponent<ArrowNavigation>().SetButtonNextFrame(menu.transform.GetChild(0).gameObject));
+        StartCoroutine(menu.GetComponent<ArrowNavigation>().SetButtonNextFrame(menu.GetComponent<ArrowNavigation>().buttons[0].gameObject));
+    }
+    public void SwitchMenu(GameObject fromMenu, GameObject toMenu)
+    {
+        HideMenu(fromMenu);
+        ShowMenu(toMenu);
+    }
+    public void HideMenu(GameObject menu)
+    {
+        menu.SetActive(false);
     }
     public void OpenOptionsMenu()
     {
-        mainMenu.SetActive(false);
-        StartCoroutine(settingsMenu.GetComponent<ArrowNavigation>().SetButtonNextFrame(settingsMenu.transform.GetChild(0).gameObject));
-        settingsMenu.SetActive(true);
+        SwitchMenu(mainMenu, settingsMenu);
     }
     public void CloseOptionsMenu()
     {
-        settingsMenu.SetActive(false);
-        StartCoroutine(mainMenu.GetComponent<ArrowNavigation>().SetButtonNextFrame(mainMenu.transform.GetChild(0).gameObject));
-        mainMenu.SetActive(true);
+        SwitchMenu(settingsMenu, mainMenu);
     }
     public void OpenStatisticsMenu()
     {
-        mainMenu.SetActive(false);
-        StartCoroutine(statisticsMenu.GetComponent<ArrowNavigation>().SetButtonNextFrame(statisticsMenu.transform.GetChild(0).gameObject));
-        statisticsMenu.SetActive(true);
+        SwitchMenu(mainMenu, statisticsMenu);
     }
     public void CloseStatisticsMenu()
     {
-        statisticsMenu.gameObject.SetActive(false);
-        StartCoroutine(mainMenu.GetComponent<ArrowNavigation>().SetButtonNextFrame(mainMenu.transform.GetChild(0).gameObject));
-        mainMenu.SetActive(true);
+        SwitchMenu(statisticsMenu, mainMenu);
     }
-    /*  public void OpenMainMenu()
+    public void OpenQuitMenu()
     {
-        mainMenu.SetActive(true);
-       
-        settingsMenu.SetActive(false);
-        statisticsMenu.SetActive(false);
-    } */
+        SwitchMenu(mainMenu, quitMenu);
+    }
+    public void CloseQuitMenu()
+    {
+        SwitchMenu(quitMenu, mainMenu);
+    }
+    public void OpenChapter1()
+    {
+        HideMenu(mainMenu);
+        //Chapter 1 acilacak
+    }
+    public void AddToMenus(GameObject gameObject, MenuType menuType)
+    {
+        if (!menus.ContainsKey(gameObject))
+        {
+            menus.Add(gameObject, menuType);
+            //Debug.Log($"Menü eklendi: {gameObject.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"Menü zaten mevcut: {gameObject.name}");
+        }
+    }
+    public void RemoveFromMenus(GameObject gameObject)
+    {
+        if (menus.ContainsKey(gameObject))
+        {
+            menus.Remove(gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("There is not a gameObject to remove !!!");
+        }
+    }
+    public bool ContainsMenu(GameObject gameObject)
+    {
+        return menus.ContainsKey(gameObject);
+    }
+    public bool ContainsMenuType(MenuType menuType)
+    {
+        return menus.ContainsValue(menuType);
+    }
+    public void DeleteMenusDictionary()
+    {
+        menus.Clear();
+    }
+    private GameObject FindGameObjectInDictionary(MenuType menuType)
+    {
+        foreach (var m in menus)
+        {
+            if (m.Value == menuType)
+            {
+                return m.Key;
+            }
+        }
+        return null;
+    }
+    private GameObject FindGameObjectInDictionary(GameObject gameObject)
+    {
+        foreach (var m in menus)
+        {
+            if (m.Key == gameObject)
+            {
+                return m.Key;
+            }
+        }
+        return null;
+    }
+    private MenuType? FindMenuTypeInDictionary(GameObject gameObject)
+    {
+        foreach (var m in menus)
+        {
+            if (m.Key == gameObject)
+            {
+                return m.Value;
+            }
+        }
+        return null;
+    }
     public void QuitGame()
     {
         Application.Quit();

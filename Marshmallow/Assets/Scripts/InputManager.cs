@@ -118,14 +118,14 @@ public class InputManager : MonoBehaviour
     }
     public void HandleNavigate(InputAction.CallbackContext context)
     {
-        Vector2 direction = context.ReadValue<Vector2>();
-        OnNavigateEvent?.Invoke(direction);
+        /* Vector2 direction = context.ReadValue<Vector2>();
+        OnNavigateEvent?.Invoke(direction); */
     }
     public void HandleSubmit(InputAction.CallbackContext context)
     {
-        var selectedObj=UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+        /* var selectedObj=UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
 
-        if(selectedObj !=null)
+        if(selectedObj !=null && context.performed)
         {
             var button = selectedObj.GetComponent<Button>();
             //Selected objeyi secebilirim
@@ -133,12 +133,13 @@ public class InputManager : MonoBehaviour
             {
                 button.onClick.Invoke();
             }
-        }
+        } */
     }
     public void HandleBack(InputAction.CallbackContext context)
     {   
         if(context.performed)
         {
+            Debug.Log("ESC veya B tuşuna basıldı, OnBackEvent çağrılıyor.");
             OnBackEvent?.Invoke();
         }
     }
