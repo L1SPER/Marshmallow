@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &289470862 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5980950675963791241, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+  m_PrefabInstance: {fileID: 4036848923196114286}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b0ec746e7944ee4f892f14e768e5a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,13 +438,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 925619925585191486, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+      propertyPath: backButton
+      value: 
+      objectReference: {fileID: 4036848923196114287}
     - target: {fileID: 1184460365365126821, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
       propertyPath: m_Name
       value: StartMenuCanvasses
       objectReference: {fileID: 0}
     - target: {fileID: 2622633544152893274, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622633544152893274, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 289470862}
+    - target: {fileID: 2622633544152893274, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenChapter1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622633544152893274, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MainMenu, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6244349184837149553, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -475,11 +502,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6365660510411873907, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+      propertyPath: m_Name
+      value: Canvasses
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+--- !u!114 &4036848923196114287 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3395722884378935236, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+  m_PrefabInstance: {fileID: 4036848923196114286}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4871664913539218317
 PrefabInstance:
   m_ObjectHideFlags: 0

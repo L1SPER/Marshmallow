@@ -10,7 +10,7 @@ public class SceneLoaderManager : MonoBehaviour
     
     public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene(sceneName);
     }
 
     public void LoadScene(int sceneId)
