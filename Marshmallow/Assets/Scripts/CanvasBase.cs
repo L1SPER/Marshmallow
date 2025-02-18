@@ -21,8 +21,8 @@ public abstract class CanvasBase : MonoBehaviour, ICanvasBackHandler
         
         if(ManagerHub.Instance==null)
             Debug.LogError("Instance is null");
-        if(!ManagerHub.Instance.GetManager<MenuManager>().ContainsMenu(this.gameObject))
-            ManagerHub.Instance.GetManager<MenuManager>().AddToMenus(this.gameObject,menuType);
+        if(!ManagerHub.Instance.GetManager<MenuManager>().ContainsMenuType(this.menuType))
+            ManagerHub.Instance.GetManager<MenuManager>().AddToMenus(menuType, this.gameObject);
 
         if (wasInactive) gameObject.SetActive(false);
     }

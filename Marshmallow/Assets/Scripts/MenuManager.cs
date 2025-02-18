@@ -1,111 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MenuType
-{
-    None,
-    Main,
-    Settings,
-    Statistics,
-    Quit
-}
 public class MenuManager : MonoBehaviour
 {
-    #region Variables Section
-    [Header("Menus")]
-    [SerializeField] GameObject mainMenu;
-    [SerializeField] GameObject settingsMenu;
-    [SerializeField] GameObject statisticsMenu;
-    [SerializeField] GameObject quitMenu;
-    #endregion
-    public static Dictionary<GameObject, MenuType> menusDictionary = new Dictionary<GameObject, MenuType>();
+    public static Dictionary<MenuType,GameObject> menusDictionary = new Dictionary<MenuType, GameObject>();
+
     private void Awake()
     {
         ManagerHub.Instance.RegisterManager(this);
     }
-    private void Start()
-    {
-        HideMenus();
-        mainMenu.GetComponent<ArrowNavigation>().SetInitialButton();
-    }
 
-    private void HideMenus()
-    {
-        HideMenu(settingsMenu);
-        HideMenu(statisticsMenu);
-        HideMenu(quitMenu);
-    }
-   
-     private void ShowMenu(GameObject menu)
-    {
-        if (!ContainsMenu(menu))
-        {
-            Debug.LogError("Menus dictionary dont contains menu");
-            return;
-        }
-        menu.SetActive(true);
-        StartCoroutine(menu.GetComponent<ArrowNavigation>().SetButtonNextFrame(menu.GetComponent<ArrowNavigation>().buttons[0].gameObject));
-    }
-    public void SwitchMenu(GameObject fromMenu, GameObject toMenu)
-    {
-        HideMenu(fromMenu);
-        ShowMenu(toMenu);
-    }
-    public void HideMenu(GameObject menu)
-    {
-        menu.SetActive(false);
-    }
-    public void HideMenu(MenuType menuType)
-    {
-        GameObject menu = FindGameObjectByMenuTypeInDictionary(menuType);
-        if (menu != null)
-        {
-            menu.SetActive(false);
-        }
-    }
-    public void OpenOptionsMenu()
-    {
-        SwitchMenu(mainMenu, settingsMenu);
-    }
-    public void CloseOptionsMenu()
-    {
-        SwitchMenu(settingsMenu, mainMenu);
-    }
-    public void OpenStatisticsMenu()
-    {
-        SwitchMenu(mainMenu, statisticsMenu);
-    }
-    public void CloseStatisticsMenu()
-    {
-        SwitchMenu(statisticsMenu, mainMenu);
-    }
-    public void OpenQuitMenu()
-    {
-        SwitchMenu(mainMenu, quitMenu);
-    }
-    public void CloseQuitMenu()
-    {
-        SwitchMenu(quitMenu, mainMenu);
-    }
-    public void OpenChapter1()
-    {
-        //HideMenu(mainMenu);
-        ManagerHub.Instance.GetManager<SceneLoaderManager>().LoadScene("Chapter1");
-
-        //StartCoroutine(menu.GetComponent<ArrowNavigation>().SetButtonNextFrame(menu.GetComponent<ArrowNavigation>().buttons[0].gameObject));
-
-        //Chapter 1 acilacak
-    }
     /// <summary>
-    /// Adds gameObject with menu type to dictionary
+    /// Adds menu type with gameObject to dictionary
     /// </summary>
-    /// <param name="gameObject"></param>
     /// <param name="menuType"></param>
-    public void AddToMenus(GameObject gameObject, MenuType menuType)
+    /// <param name="gameObject"></param>
+    public void AddToMenus(MenuType menuType,  GameObject gameObject)
     {
-        if (!menusDictionary.ContainsKey(gameObject))
+        if (!menusDictionary.ContainsKey(menuType))
         {
-            menusDictionary.Add(gameObject, menuType);
+            menusDictionary.Add(menuType, gameObject);
             //Debug.Log($"Menü eklendi: {gameObject.name}");
         }
         else
@@ -113,64 +27,70 @@ public class MenuManager : MonoBehaviour
             Debug.LogWarning($"Menü zaten mevcut: {gameObject.name}");
         }
     }
+
     /// <summary>
-    /// Removes gameObject from dictionary
+    /// Removes menu type from dictionary
     /// </summary>
-    /// <param name="gameObject"></param>
-    public void RemoveFromMenus(GameObject gameObject)
+    /// <param name="menuType"></param>
+    public void RemoveFromMenus(MenuType menuType)
     {
-        if (menusDictionary.ContainsKey(gameObject))
+        if (menusDictionary.ContainsKey(menuType))
         {
-            menusDictionary.Remove(gameObject);
+            menusDictionary.Remove(menuType);
         }
         else
         {
             Debug.LogWarning("There is not a gameObject to remove !!!");
         }
     }
+
     /// <summary>
-    /// Checks if dictionary contains same gameObject
-    /// </summary>
-    /// <param name="gameObject"></param>
-    /// <returns></returns>
-    public bool ContainsMenu(GameObject gameObject)
-    {
-        return menusDictionary.ContainsKey(gameObject);
-    }
-    /// <summary>
-    /// Checks if dictionary contains same menu type
+    /// Checks if dictionary contains that menu type
     /// </summary>
     /// <param name="menuType"></param>
     /// <returns></returns>
     public bool ContainsMenuType(MenuType menuType)
     {
-        return menusDictionary.ContainsValue(menuType);
+        return menusDictionary.ContainsKey(menuType);
     }
+
     /// <summary>
-    /// Finds first gameObject that matches menu type in dictionary
+    /// Checks if dictionary contains that gameObject
+    /// </summary>
+    /// <param name="gameObject"></param>
+    /// <returns></returns>
+    public bool ContainsMenu(GameObject gameObject)
+    {
+        return menusDictionary.ContainsValue(gameObject);
+    }
+
+    /// <summary>
+    /// Finds first menu type that matches gameObject in dictionary
     /// </summary>
     /// <param name="menuType"></param>
     /// <returns></returns>
-    private GameObject  FindGameObjectByMenuTypeInDictionary(MenuType menuType)
+    public MenuType? FindMenuTypeByGameObjectInDictionary(GameObject gameObject)
     {
-        foreach (var m in menusDictionary)
+        foreach (var item in menusDictionary)
         {
-            if (m.Value == menuType)
+            if (item.Value == gameObject)
             {
-                return m.Key;
+                return item.Key;
             }
         }
         return null;
     }
+
     /// <summary>
-    /// Finds menu type of gameObject in dictionary
+    /// Finds gameObject that matches menu type in dictionary
     /// </summary>
     /// <param name="gameObject"></param>
     /// <returns></returns>
-    private MenuType? FindMenuTypeInDictionary(GameObject gameObject)
+    public GameObject FindGameObjectInDictionary(MenuType menuType)
     {
-        return menusDictionary.TryGetValue(gameObject, out MenuType menuType) ?  menuType:  null; 
+        return menusDictionary.ContainsKey(menuType) ? menusDictionary[menuType] : null;
     }
+
     /// <summary>
     /// Deletes all menus in dictionary
     /// </summary>
@@ -178,11 +98,5 @@ public class MenuManager : MonoBehaviour
     {
         menusDictionary.Clear();
     }
-    /// <summary>
-    /// Quits the game
-    /// </summary>
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
+    
 }

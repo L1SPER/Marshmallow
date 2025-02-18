@@ -431,6 +431,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartMenuCanvasses
       objectReference: {fileID: 0}
+    - target: {fileID: 2622633544152893274, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6244349184837149553, guid: 7400a7c94a94ae34b8c364151678b17b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 779.98926
@@ -528,8 +532,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6921805648874012775, guid: 1f87e9f7bd115f443b6c6a8583f3b988, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
