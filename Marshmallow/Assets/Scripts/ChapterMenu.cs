@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class ChapterMenu : MenuBase
 {
-    protected override void Start()
+    public void OpenMainMenu()
     {
-        HideMenus();
-        menuManager.FindGameObjectInDictionary(MenuType.Chapter1).GetComponent<ArrowNavigation>().SetInitialButton();
+        ManagerHub.Instance.GetManager<SceneLoaderManager>().LoadScene("MainMenu");
     }
-
     protected override void HideMenus()
     {
-
+        //throw new NotImplementedException();
     }
 }

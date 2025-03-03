@@ -9,23 +9,10 @@ public abstract class CanvasBase : MonoBehaviour, ICanvasBackHandler
         LoadScene,
         OpenPreviousMenu            
     }
-    [SerializeField] protected MenuType menuType;
     [SerializeField] public BackActionType backActionType;
     [SerializeField, HideInInspector] protected string sceneToLoad;
     [SerializeField, HideInInspector] protected Button backButton;
 
-    protected virtual void Awake()
-    {
-        bool wasInactive = !gameObject.activeSelf;
-        if (wasInactive) gameObject.SetActive(true);
-        
-        if(ManagerHub.Instance==null)
-            Debug.LogError("Instance is null");
-        if(!ManagerHub.Instance.GetManager<MenuManager>().ContainsMenuType(this.menuType))
-            ManagerHub.Instance.GetManager<MenuManager>().AddToMenus(menuType, this.gameObject);
-
-        if (wasInactive) gameObject.SetActive(false);
-    }
     protected virtual void OnEnable()
     {
         ManagerHub.Instance.GetManager<InputManager>().OnBackEvent += OnBack;
